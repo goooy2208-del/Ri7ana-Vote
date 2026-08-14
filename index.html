@@ -592,8 +592,8 @@
           <img src="ريحانة.png" alt="شعار مؤسسة ريحانة الخير" class="logo" style="width:84px; height:84px; animation:none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
           <div class="logo" style="display:none; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:900; font-size:0.9rem; letter-spacing:0.06em; padding:0 0.3rem; width:84px; height:84px;">RI7HANA</div>
         </div>
-        <button class="btn-main" id="btnFinalConfirm" type="button" aria-label="تأكيد نهائي">
-          <span class="em">✅</span> تأكيد
+        <button class="btn-main" id="btnSendResult" type="button" aria-label="إرسال النتيجة على واتساب">
+          <span class="em">📲</span> إرسال النتيجة
         </button>
         <a href="results.html" style="display:flex; align-items:center; justify-content:center; gap:0.4rem; margin-top:1.4rem; font-size:0.9rem; font-weight:700; color:var(--primary); text-decoration:none; transition:transform 0.3s var(--ease-spring);">🔐 شوف النتايج النهائية</a>
       </div>
@@ -939,10 +939,12 @@
       } catch (e) {}
     });
 
-    btnFinalConfirm.addEventListener('click', () => {
+    btnSendResult.addEventListener('click', () => {
+      const timeText = finalTimeEl.textContent;
+      const msg = `🌿 مؤسسة ريحانة الخير\nتم تحديد موعد الميتينج:\n\n📅 السبت\n🌙 بالليل\n⏰ الساعة: ${timeText}\n\n✅ تأكيد نهائي`;
+      window.open(`https://wa.me/201090103634?text=${encodeURIComponent(msg)}`, '_blank');
       confetti();
-      showToast('تم التأكيد النهائي يا شباب ✅🔥');
-      successRing(btnFinalConfirm.closest('.card'));
+      showToast('جاري الإرسال على واتساب 📲😎');
     });
 
     // Keyboard accessibility: Enter on dodger = dodge attempt
