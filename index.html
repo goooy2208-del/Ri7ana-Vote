@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مؤسسة ريحانة الخير - تحديد موعد الميتينج</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2D6A4F;
+      --primary-light: #40916C;
+      --primary-dark: #1B4332;
+      --accent: #D4A843;
+      --accent-light: #E8C56D;
+      --bg: #F7F5EF;
+      --card: #FFFFFF;
+      --text: #1A1A2E;
+      --text-muted: #7A7E8C;
+      --shadow: 0 24px 60px -18px rgba(27, 67, 50, 0.18);
+      --shadow-sm: 0 10px 30px -10px rgba(27, 67, 50, 0.15);
+      --radius: 28px;
+      --radius-sm: 18px;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    @keyframes blobFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -30px) scale(1.15); }
+      66% { transform: translate(-30px, 25px) scale(0.95); }
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(34px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes stepOut {
+      from { opacity: 1; transform: translateY(0) scale(1); }
+      to { opacity: 0; transform: translateY(-28px) scale(0.97); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      60% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes idlePulse {
+      0%, 100% { box-shadow: 0 10px 30px -8px rgba(45, 106, 79, 0.35); }
+      50% { box-shadow: 0 14px 44px -8px rgba(45, 106, 79, 0.55); }
+    }
+    @keyframes shine {
+      0% { left: -80%; }
+      100% { left: 130%; }
+    }
+    @keyframes landPop {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(-3deg) scale(1.04); }
+      50% { transform: rotate(3deg) scale(1.02); }
+    }
+    @keyframes emojiFloat {
+      0% { opacity: 0; transform: translateY(0) scale(0.4) rotate(-12deg); }
+      20% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-90px) scale(1.3) rotate(14deg); }
+    }
+    @keyframes confettiFall {
+      0% { transform: translate3d(var(--drift), -12vh, 0) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(calc(var(--drift) * -1), 112vh, 0) rotate(760deg); opacity: 0.7; }
+    }
+    @keyframes ringPulse {
+      0% { transform: scale(0.4); opacity: 0.9; }
+      100% { transform: scale(2.4); opacity: 0; }
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0); }
+      60% { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+    @keyframes dotPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.35); opacity: 1; }
+    }
+    @keyframes typing {
+      0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      z-index: -1;
+      pointer-events: none;
+      animation: blobFloat 14s ease-in-out infinite;
+    }
+    .blob-1 { width: 420px; height: 420px; background: rgba(45, 106, 79, 0.35); top: -120px; right: -120px; }
+    .blob-2 { width: 380px; height: 380px; background: rgba(212, 168, 67, 0.3); bottom: -140px; left: -110px; animation-delay: -7s; }
+    .blob-3 { width: 260px; height: 260px; background: rgba(64, 145, 108, 0.22); top: 45%; left: 60%; animation-delay: -3.5s; }
+
+    .container { width: 100%; max-width: 500px; position: relative; z-index: 1; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 auto 1.25rem;
+      padding: 0.45rem 1.1rem;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(45, 106, 79, 0.14);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      animation: popIn 0.7s var(--ease-spring) both;
+    }
+
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      animation: popIn 0.8s var(--ease-spring) both;
+    }
+    .logo {
+      width: 104px;
+      height: 104px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 28px rgba(45, 106, 79, 0.25));
+      transition: transform 0.5s var(--ease-spring);
+      animation: idlePulse 3.4s ease-in-out infinite;
+    }
+    .logo:hover { transform: scale(1.07) rotate(-3deg); }
+
+    .progress {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.75rem;
+    }
+    .dot {
+      width: 34px;
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(45, 106, 79, 0.16);
+      transition: all 0.5s var(--ease-spring);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .dot.active {
+      background: var(--primary);
+      width: 46px;
+      box-shadow: 0 0 0 5px rgba(45, 106, 79, 0.14);
+      animation: dotPulse 1.6s ease-in-out infinite;
+    }
+    .dot.done { background: var(--accent); width: 22px; }
+    .dot.done::after { content: '✓'; color: white; font-size: 0.62rem; font-weight: 900; animation: bounceIn 0.4s var(--ease-spring); }
+
+    .step { display: none; }
+    .step.active { display: block; animation: stepIn 0.55s var(--ease-spring) both; }
+    .step.leaving { display: block; animation: stepOut 0.28s ease-in both; }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.6rem 1.8rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
+    }
+    .card::after {
+      content: '';
+      position: absolute;
+      top: -60px;
+      left: -60px;
+      width: 180px;
+      height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(212, 168, 67, 0.1), transparent 70%);
+      pointer-events: none;
+    }
+
+    h1 {
+      font-size: clamp(1.55rem, 5.5vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      z-index: 1;
+    }
+    h2 {
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+    .celebrate {
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0 0 1.75rem;
+      animation: popIn 0.6s var(--ease-spring) both;
+      position: relative;
+      z-index: 1;
+    }
+
+    .choice-area {
+      position: relative;
+      height: 118px;
+      transition: height 0.4s ease;
+    }
+    @media (max-width: 440px) {
+      .choice-area { height: 196px; }
+    }
+
+    .choice-btn {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 72px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      user-select: none;
+      touch-action: manipulation;
+      overflow: hidden;
+      z-index: 5;
+      will-change: translate;
+    }
+    .choice-btn .em { font-size: 1.5rem; line-height: 1; transition: transform 0.4s var(--ease-spring); display: inline-block; }
+    .choice-btn:hover .em { transform: scale(1.3) rotate(-10deg); }
+
+    .btn-valid {
+      background: linear-gradient(135deg, var(--primary), var(--primary-light) 60%, #4CA47F);
+      color: #fff;
+      box-shadow: 0 12px 32px -10px rgba(45, 106, 79, 0.55);
+      animation: idlePulse 2.6s ease-in-out infinite;
+      transition: transform 0.45s var(--ease-spring), box-shadow 0.45s ease;
+    }
+    .btn-valid::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -80%;
+      width: 45%;
+      height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+      transform: skewX(-20deg);
+      animation: shine 3.2s ease-in-out infinite;
+    }
+    .btn-valid:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 20px 46px -12px rgba(45, 106, 79, 0.65);
+    }
+    .btn-valid:active { transform: translateY(0) scale(0.97); }
+
+    .btn-dodge {
+      background: linear-gradient(135deg, #FFF7DE, #FBE9B0);
+      color: var(--primary-dark);
+      border: 2px solid rgba(212, 168, 67, 0.45);
+      box-shadow: 0 10px 26px -10px rgba(212, 168, 67, 0.5);
+      z-index: 20;
+      transition: box-shadow 0.4s ease;
+    }
+    .btn-dodge:hover { box-shadow: 0 14px 34px -10px rgba(212, 168, 67, 0.65); }
+    .btn-dodge.dodging { animation: wiggle 0.35s ease-in-out 2; }
+    .btn-dodge.landed { animation: landPop 0.4s var(--ease-spring); }
+
+    .btn-main {
+      width: 100%;
+      height: 68px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 14px 36px -10px rgba(45, 106, 79, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.45s var(--ease-spring), box-shadow 0.45s ease;
+    }
+    .btn-main::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -80%;
+      width: 45%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+      transform: skewX(-20deg);
+      animation: shine 3s ease-in-out infinite;
+    }
+    .btn-main:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 22px 50px -12px rgba(45, 106, 79, 0.7); }
+    .btn-main:active { transform: translateY(0) scale(0.98); }
+    .btn-main .em { font-size: 1.5rem; }
+
+    .time-wrap {
+      margin: 2.25rem 0 2rem;
+      display: flex;
+      justify-content: center;
+    }
+    .time-input {
+      width: 100%;
+      max-width: 300px;
+      padding: 1.05rem 1.4rem;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      border: 2.5px solid rgba(45, 106, 79, 0.18);
+      border-radius: var(--radius-sm);
+      background: #FBFAF7;
+      color: var(--text);
+      direction: ltr;
+      transition: all 0.35s ease;
+      box-shadow: inset 0 2px 8px rgba(27, 67, 50, 0.05);
+    }
+    .time-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 6px rgba(45, 106, 79, 0.15), 0 12px 30px -12px rgba(45, 106, 79, 0.4);
+      transform: translateY(-2px);
+    }
+    .time-input::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      filter: invert(42%) sepia(55%) saturate(600%) hue-rotate(95deg);
+      padding: 0.5rem;
+      margin-left: 0.4rem;
+      border-radius: 8px;
+    }
+    .time-input::-webkit-calendar-picker-indicator:hover { background: rgba(45, 106, 79, 0.12); }
+
+    .typing-note {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      margin-top: 1.4rem;
+      font-weight: 600;
+    }
+    .typing-note span {
+      display: inline-block;
+      width: 6px; height: 6px;
+      margin: 0 2px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: typing 1.2s infinite;
+    }
+    .typing-note span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-note span:nth-child(3) { animation-delay: 0.4s; }
+
+    .final-summary {
+      background: linear-gradient(135deg, rgba(45, 106, 79, 0.07), rgba(212, 168, 67, 0.07));
+      border: 1.5px solid rgba(45, 106, 79, 0.14);
+      border-radius: var(--radius-sm);
+      padding: 1.6rem 1.4rem;
+      margin: 1.75rem 0;
+      text-align: center;
+    }
+    .summary-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 0.8rem 0;
+      animation: popIn 0.5s var(--ease-spring) both;
+    }
+    .summary-item:nth-child(2) { animation-delay: 0.12s; }
+    .summary-item:nth-child(3) { animation-delay: 0.24s; }
+    .summary-item .icon { font-size: 1.6rem; }
+    .summary-time {
+      color: var(--primary);
+      font-size: 1.45rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .ring {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: 60px;
+      height: 60px;
+      border: 4px solid var(--accent);
+      border-radius: 50%;
+      animation: ringPulse 0.9s ease-out 2;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 1.75rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px) scale(0.9);
+      background: var(--card);
+      padding: 0.9rem 1.6rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--primary-dark);
+      opacity: 0;
+      transition: all 0.5s var(--ease-spring);
+      z-index: 100;
+      border: 2px solid rgba(212, 168, 67, 0.4);
+      max-width: 92vw;
+      text-align: center;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    .toast.dodge-toast { border-color: rgba(230, 57, 70, 0.35); background: linear-gradient(135deg, #FFF7F5, #FFEFEC); }
+
+    .emoji-pop {
+      position: fixed;
+      font-size: 1.7rem;
+      pointer-events: none;
+      z-index: 90;
+      animation: emojiFloat 1.1s ease-out forwards;
+    }
+
+    .confetti-piece {
+      position: fixed;
+      top: -3vh;
+      pointer-events: none;
+      z-index: 80;
+      animation: confettiFall linear forwards;
+    }
+
+    @media (max-width: 440px) {
+      body { padding: 1.25rem 0.75rem; }
+      .card { padding: 2.2rem 1.3rem; }
+      .btn-valid::after, .btn-main::after { animation-duration: 4s; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="container">
+    <div class="chip">🤝 اجتماع فريق مؤسسة ريحانة الخير</div>
+
+    <div class="logo-wrap" role="img" aria-label="شعار مؤسسة ريحانة الخير">
+      <img src="ريحانة.png" alt="شعار مؤسسة ريحانة الخير" class="logo" id="logoImg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="logo" style="display:none; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:900; font-size:1.05rem; letter-spacing:0.06em; padding:0 0.3rem;">RI7HANA</div>
+    </div>
+
+    <div class="progress" role="progressbar" aria-valuenow="1" aria-valuemin="1" aria-valuemax="5" aria-label="خطوات تحديد الموعد" id="progressBar">
+      <div class="dot active" id="dot1"></div>
+      <div class="dot" id="dot2"></div>
+      <div class="dot" id="dot3"></div>
+      <div class="dot" id="dot4"></div>
+      <div class="dot" id="dot5"></div>
+    </div>
+
+    <!-- STEP 1: Choose Day -->
+    <section class="step active" id="step1" aria-labelledby="step1-title">
+      <div class="card">
+        <h1 id="step1-title">يلا يا شباب، نحدد الميتينج 🎯</h1>
+        <h2>تحبوا الميتينج يكون يوم إيه؟ 🤔</h2>
+        <div class="choice-area" id="dayArea">
+          <button class="choice-btn btn-dodge" id="btnFriday" type="button" aria-label="الجمعة - غير متاح">
+            <span class="em">😏</span> الجمعة
+          </button>
+          <button class="choice-btn btn-valid" id="btnSaturday" type="button" aria-label="السبت - متاح">
+            <span class="em">😎</span> السبت
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 2: Time of Day -->
+    <section class="step" id="step2" aria-labelledby="step2-title">
+      <div class="card">
+        <h1 id="step2-title">أيوه كده يا جدع 😂🔥</h1>
+        <h2>دلوقتي نحدد الميعاد... ⏳</h2>
+        <div class="celebrate">✅ السبت — تمام يا بطل!</div>
+        <div class="choice-area" id="timeArea">
+          <button class="choice-btn btn-dodge" id="btnMorning" type="button" aria-label="الصبح - غير متاح">
+            <span class="em">☀️</span> الصبح
+          </button>
+          <button class="choice-btn btn-valid" id="btnNight" type="button" aria-label="بالليل - متاح">
+            <span class="em">🌙</span> بالليل
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- STEP 3: Night Selected -->
+    <section class="step" id="step3" aria-labelledby="step3-title">
+      <div class="card">
+        <h1 id="step3-title">مش قولتلك جدع 😂🔥</h1>
+        <h2>كده تمام، المرادي بجد بقى 😌✨</h2>
+        <div class="celebrate">🌙 ليل ريحانة — يسطا!</div>
+        <div class="typing-note">بنجهز لخطوة الساعة <span></span><span></span><span></span></div>
+      </div>
+    </section>
+
+    <!-- STEP 4: Enter Time -->
+    <section class="step" id="step4" aria-labelledby="step4-title">
+      <div class="card">
+        <h1 id="step4-title">اكتب بقى تحب نبدأ الساعة كام؟ ⏰🤔</h1>
+        <h2>اختار أو اكتب الوقت اللي يريحك 🌙</h2>
+        <div class="time-wrap">
+          <input type="time" class="time-input" id="timeInput" value="20:00" step="900" aria-label="اختر وقت بداية الميتينج">
+        </div>
+        <button class="btn-main" id="btnConfirm" type="button" aria-label="تأكيد الموعد">
+          <span class="em">🤝</span> خلاص اتفقنا
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 5: Final Confirmation -->
+    <section class="step" id="step5" aria-labelledby="step5-title">
+      <div class="card">
+        <h1 id="step5-title">تم يا شباب 🔥🎉</h1>
+        <div class="final-summary" role="region" aria-label="تفاصيل الموعد النهائي">
+          <div class="summary-item"><span class="icon">📅</span> السبت</div>
+          <div class="summary-item"><span class="icon">🌙</span> بالليل</div>
+          <div class="summary-item"><span class="icon">⏰</span> الساعة: <span class="summary-time" id="finalTime">08:00 PM</span></div>
+        </div>
+        <h2 id="finalMsg">أهو كده خلصنا من الحوار ده 😂❤️</h2>
+        <div class="logo-wrap" style="margin-top: 1.5rem;">
+          <img src="ريحانة.png" alt="شعار مؤسسة ريحانة الخير" class="logo" style="width:84px; height:84px; animation:none;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="logo" style="display:none; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:900; font-size:0.9rem; letter-spacing:0.06em; padding:0 0.3rem; width:84px; height:84px;">RI7HANA</div>
+        </div>
+        <button class="btn-main" id="btnFinalConfirm" type="button" aria-label="تأكيد نهائي">
+          <span class="em">✅</span> تأكيد
+        </button>
+        <a href="results.html" style="display:flex; align-items:center; justify-content:center; gap:0.4rem; margin-top:1.4rem; font-size:0.9rem; font-weight:700; color:var(--primary); text-decoration:none; transition:transform 0.3s var(--ease-spring);">🔐 شوف النتايج النهائية</a>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script>
+    // ===== MESSAGES =====
+    const fridayMessages = [
+      "لا يا نجم 😂😜",
+      "جرب تاني كده... 😏",
+      "إنت فاكرني مش واخد بالي؟ 👀",
+      "إنت مش هتخلص؟ 😂🙈",
+      "الجمعة مش اختيار عندنا يا باشا 😎",
+      "بقولك السبت يا نجم 🌚",
+      "أنا صبور... بس 😅"
+    ];
+
+    const morningMessages = [
+      "الصبح إيه بس يا عم 😭🙃",
+      "مين بيعمل ميتينج الصبح؟! 😴",
+      "قولنا بليل يا جدع 🌚",
+      "لسه مصمم؟ 😂🤦",
+      "الصبح؟! عيب عليك 😜",
+      "يا عم بليل! ☕🌙",
+      "مش قولتلك بليل 😂",
+      "إنت بتفاوضني؟ 🌚😏"
+    ];
+
+    const finalMessages = [
+      "أهو كده خلصنا من الحوار ده 😂❤️",
+      "ميعاد محفور في الحجر 🗿🔥",
+      "شباب ريحانة جاهزين! 🚀✨",
+      "السبت بالليل.. مفيش تراجع 😎"
+    ];
+
+    const reactionEmojis = ['😜', '🤣', '🙃', '👀', '🌚', '😅', '🤦‍♂️', '😭', '😏'];
+
+    // ===== DOM =====
+    const steps = {
+      1: document.getElementById('step1'),
+      2: document.getElementById('step2'),
+      3: document.getElementById('step3'),
+      4: document.getElementById('step4'),
+      5: document.getElementById('step5')
+    };
+    const dots = {
+      1: document.getElementById('dot1'),
+      2: document.getElementById('dot2'),
+      3: document.getElementById('dot3'),
+      4: document.getElementById('dot4'),
+      5: document.getElementById('dot5')
+    };
+    const toast = document.getElementById('toast');
+    const progressBar = document.getElementById('progressBar');
+
+    const btnFriday = document.getElementById('btnFriday');
+    const btnSaturday = document.getElementById('btnSaturday');
+    const btnMorning = document.getElementById('btnMorning');
+    const btnNight = document.getElementById('btnNight');
+    const dayArea = document.getElementById('dayArea');
+    const timeArea = document.getElementById('timeArea');
+    const timeInput = document.getElementById('timeInput');
+    const btnConfirm = document.getElementById('btnConfirm');
+    const btnRestart = document.getElementById('btnRestart');
+    const finalTimeEl = document.getElementById('finalTime');
+    const finalMsg = document.getElementById('finalMsg');
+
+    let currentStep = 1;
+    let selectedTime = "20:00";
+    let toastTimer = null;
+
+    // ===== TOAST =====
+    function showToast(message, dodgeStyle = false) {
+      clearTimeout(toastTimer);
+      toast.textContent = message;
+      toast.classList.toggle('dodge-toast', dodgeStyle);
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2300);
+    }
+
+    // ===== STEP TRANSITION =====
+    function goToStep(step) {
+      const cur = steps[currentStep];
+      cur.classList.add('leaving');
+      dots[currentStep].classList.remove('active');
+      if (currentStep < step) dots[currentStep].classList.add('done');
+
+      setTimeout(() => {
+        cur.classList.remove('active', 'leaving');
+        currentStep = step;
+        steps[step].classList.add('active');
+        dots[step].classList.add('active');
+        progressBar.setAttribute('aria-valuenow', step);
+        if (step === 1) fridayDodger.layout();
+        if (step === 2) morningDodger.layout();
+      }, 240);
+    }
+
+    // ===== CONFETTI =====
+    function confetti() {
+      const colors = ['#2D6A4F', '#D4A843', '#40916C', '#E8C56D', '#1B4332', '#FDE68A'];
+      const shapes = ['0%', '50%', '0%'];
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        const size = 6 + Math.random() * 10;
+        p.style.width = size + 'px';
+        p.style.height = (Math.random() > 0.35 ? size * 0.55 : size) + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.borderRadius = shapes[Math.floor(Math.random() * shapes.length)];
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.setProperty('--drift', (Math.random() * 40 - 20) + 'vw');
+        p.style.animationDuration = (2.2 + Math.random() * 2) + 's';
+        p.style.animationDelay = (Math.random() * 0.6) + 's';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 5200);
+      }
+    }
+
+    function successRing(btn) {
+      const card = btn.closest('.card');
+      const ring = document.createElement('div');
+      ring.className = 'ring';
+      card.appendChild(ring);
+      setTimeout(() => ring.remove(), 2000);
+    }
+
+    // ===== FLOATING EMOJI =====
+    function popEmoji(btn) {
+      const e = document.createElement('div');
+      e.className = 'emoji-pop';
+      e.textContent = reactionEmojis[Math.floor(Math.random() * reactionEmojis.length)];
+      const r = btn.getBoundingClientRect();
+      e.style.left = (r.left + Math.random() * r.width) + 'px';
+      e.style.top = (r.top - 10) + 'px';
+      document.body.appendChild(e);
+      setTimeout(() => e.remove(), 1200);
+    }
+
+    // ===== DODGE ENGINE (spring physics) =====
+    function createDodger(btn, container, validBtn, messages, counter) {
+      let x = 0, y = 0, vx = 0, vy = 0, tx = 0, ty = 0;
+      let rafId = null;
+      let lastMsgAt = 0;
+      let lastMoveAt = 0;
+      let placed = false;
+
+      function slotPosition() {
+        const cw = container.clientWidth;
+        const isMobile = cw < 440;
+        const gap = 16;
+        const bw = isMobile ? cw : (cw - gap) / 2;
+        const bh = 72;
+        if (isMobile) {
+          return { x: 0, y: 0, w: cw };
+        }
+        return { x: cw - bw, y: 0, w: bw }; // RTL: first button on the right
+      }
+
+      function layout() {
+        const cw = container.clientWidth;
+        if (cw === 0) return; // container hidden — layout when it becomes visible
+        const slot = slotPosition();
+        const isMobile = cw < 440;
+        const bh = 72;
+        const gap = 16;
+        btn.style.width = slot.w + 'px';
+        validBtn.style.width = slot.w + 'px';
+        if (isMobile) {
+          validBtn.style.translate = `0px ${bh + gap}px`;
+        } else {
+          validBtn.style.translate = `0px 0px`;
+        }
+        container.style.height = isMobile ? '196px' : '118px';
+        const maxX = Math.max(0, cw - btn.offsetWidth);
+        const maxY = Math.max(0, container.clientHeight - btn.offsetHeight);
+        if (!placed) {
+          x = slot.x; y = slot.y; tx = slot.x; ty = slot.y;
+          placed = true;
+        }
+        x = Math.min(x, maxX); y = Math.min(y, maxY);
+        tx = Math.min(tx, maxX); ty = Math.min(ty, maxY);
+        if (!rafId) btn.style.translate = `${x}px ${y}px`;
+      }
+
+      function avoidsValid(px, py) {
+        const cr = container.getBoundingClientRect();
+        const vr = validBtn.getBoundingClientRect();
+        const vx = vr.left - cr.left, vy = vr.top - cr.top;
+        const bw = btn.offsetWidth, bh = btn.offsetHeight;
+        return !(px < vx + vr.width + 10 && px + bw > vx - 10 && py < vy + vr.height + 10 && py + bh > vy - 10);
+      }
+
+      function randomTarget(evt) {
+        const maxX = Math.max(16, container.clientWidth - btn.offsetWidth);
+        const maxY = Math.max(16, container.clientHeight - btn.offsetHeight);
+        let nx, ny;
+        if (evt) {
+          const r = btn.getBoundingClientRect();
+          const dx = (r.left + r.width / 2) - evt.clientX;
+          const dy = (r.top + r.height / 2) - evt.clientY;
+          const d = Math.hypot(dx, dy) || 1;
+          nx = x + (dx / d) * (110 + Math.random() * 130);
+          ny = y + (dy / d) * (40 + Math.random() * 70);
+        } else {
+          nx = 8 + Math.random() * (maxX - 16);
+          ny = 8 + Math.random() * (maxY - 16);
+        }
+        nx = Math.max(0, Math.min(maxX, nx));
+        ny = Math.max(0, Math.min(maxY, ny));
+        for (let i = 0; i < 10 && !avoidsValid(nx, ny); i++) {
+          nx = Math.max(0, Math.min(maxX, 8 + Math.random() * (maxX - 16)));
+          ny = Math.max(0, Math.min(maxY, 8 + Math.random() * (maxY - 16)));
+        }
+        return { x: nx, y: ny };
+      }
+
+      function startSpring() {
+        if (rafId) return;
+        btn.classList.add('dodging');
+        const k = 0.085, damp = 0.78;
+        function frame() {
+          const ax = (tx - x) * k;
+          const ay = (ty - y) * k;
+          vx = (vx + ax) * damp;
+          vy = (vy + ay) * damp;
+          x += vx;
+          y += vy;
+          const rot = Math.max(-16, Math.min(16, vx * 0.09));
+          btn.style.translate = `${x}px ${y}px`;
+          btn.style.rotate = `${rot}deg`;
+          if (Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5 || Math.abs(vx) > 0.04 || Math.abs(vy) > 0.04) {
+            rafId = requestAnimationFrame(frame);
+          } else {
+            rafId = null;
+            btn.style.translate = `${tx}px ${ty}px`;
+            btn.style.rotate = '0deg';
+            btn.classList.remove('dodging');
+            btn.classList.add('landed');
+            setTimeout(() => btn.classList.remove('landed'), 450);
+          }
+        }
+        rafId = requestAnimationFrame(frame);
+      }
+
+      function dodge(evt) {
+        const t = randomTarget(evt);
+        tx = t.x;
+        ty = t.y;
+        startSpring();
+        const now = performance.now();
+        if (now - lastMsgAt > 850) {
+          lastMsgAt = now;
+          counter.count++;
+          showToast(messages[(counter.count - 1) % messages.length], true);
+          popEmoji(btn);
+        }
+      }
+
+      // Desktop: flee the mouse
+      container.addEventListener('mousemove', (e) => {
+        if (e.pointerType === 'touch') return;
+        const now = performance.now();
+        if (now - lastMoveAt < 60) return;
+        const r = btn.getBoundingClientRect();
+        const dx = e.clientX - (r.left + r.width / 2);
+        const dy = e.clientY - (r.top + r.height / 2);
+        const dist = Math.hypot(dx, dy);
+        if (dist < 170 && currentStep === counter.step) {
+          lastMoveAt = now;
+          dodge(e);
+        }
+      });
+
+      // Mobile: flee on touch
+      btn.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'touch') {
+          e.preventDefault();
+          dodge(null);
+        }
+      });
+      btn.addEventListener('touchstart', (e) => { e.preventDefault(); dodge(null); }, { passive: false });
+      btn.addEventListener('click', (e) => { e.preventDefault(); dodge(null); });
+
+      // reset back to slot
+      function reset() {
+        if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+        placed = false;
+        layout();
+        btn.style.rotate = '0deg';
+        btn.classList.remove('dodging', 'landed');
+        counter.count = 0;
+      }
+
+      layout();
+      window.addEventListener('resize', layout);
+      return { reset, layout };
+    }
+
+    const fridayDodger = createDodger(btnFriday, dayArea, btnSaturday, fridayMessages, { count: 0, step: 1 });
+    const morningDodger = createDodger(btnMorning, timeArea, btnNight, morningMessages, { count: 0, step: 2 });
+
+    // ===== VALID ACTIONS =====
+    btnSaturday.addEventListener('click', () => {
+      if (currentStep !== 1) return;
+      confetti();
+      successRing(btnSaturday);
+      btnSaturday.querySelector('.em').style.transform = 'scale(1.5) rotate(-10deg)';
+      setTimeout(() => goToStep(2), 420);
+    });
+
+    btnNight.addEventListener('click', () => {
+      if (currentStep !== 2) return;
+      confetti();
+      successRing(btnNight);
+      btnNight.querySelector('.em').style.transform = 'scale(1.5) rotate(-10deg)';
+      setTimeout(() => {
+        goToStep(3);
+        setTimeout(() => goToStep(4), 1500);
+      }, 420);
+    });
+
+    timeInput.addEventListener('change', (e) => { selectedTime = e.target.value; });
+    timeInput.addEventListener('input', (e) => { selectedTime = e.target.value; });
+
+    btnConfirm.addEventListener('click', () => {
+      const [h, m] = selectedTime.split(':').map(Number);
+      const ampm = h >= 12 ? 'PM' : 'AM';
+      const h12 = h % 12 || 12;
+      const formatted = `${h12.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')} ${ampm}`;
+      finalTimeEl.textContent = formatted;
+      finalMsg.textContent = finalMessages[Math.floor(Math.random() * finalMessages.length)];
+      confetti();
+      goToStep(5);
+
+      try {
+        const votes = JSON.parse(localStorage.getItem('reihana_votes')) || [];
+        votes.push({ time: selectedTime, formatted, at: new Date().toISOString() });
+        localStorage.setItem('reihana_votes', JSON.stringify(votes));
+      } catch (e) {}
+    });
+
+    btnFinalConfirm.addEventListener('click', () => {
+      confetti();
+      showToast('تم التأكيد النهائي يا شباب ✅🔥');
+      successRing(btnFinalConfirm.closest('.card'));
+    });
+
+    // Keyboard accessibility: Enter on dodger = dodge attempt
+    [btnFriday, btnMorning].forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); btn.click(); }
+      });
+      btn.addEventListener('contextmenu', e => e.preventDefault());
+    });
+
+    console.log('🌿 ريحانة الخير — الميتينج جاهز يبدأ!');
+  </script>
+</body>
+</html>

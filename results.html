@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مؤسسة ريحانة الخير - صفحة النتائج</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #2D6A4F;
+      --primary-light: #40916C;
+      --primary-dark: #1B4332;
+      --accent: #D4A843;
+      --accent-light: #E8C56D;
+      --bg: #F7F5EF;
+      --card: #FFFFFF;
+      --text: #1A1A2E;
+      --text-muted: #7A7E8C;
+      --shadow: 0 24px 60px -18px rgba(27, 67, 50, 0.18);
+      --shadow-sm: 0 10px 30px -10px rgba(27, 67, 50, 0.15);
+      --radius: 28px;
+      --radius-sm: 18px;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    @keyframes blobFloat {
+      0%, 100% { transform: translate(0, 0) scale(1); }
+      33% { transform: translate(40px, -30px) scale(1.15); }
+      66% { transform: translate(-30px, 25px) scale(0.95); }
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateY(34px) scale(0.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes popIn {
+      0% { transform: scale(0.6); opacity: 0; }
+      60% { transform: scale(1.08); opacity: 1; }
+      100% { transform: scale(1); }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-12px); }
+      40% { transform: translateX(12px); }
+      60% { transform: translateX(-8px); }
+      80% { transform: translateX(8px); }
+    }
+    @keyframes idlePulse {
+      0%, 100% { box-shadow: 0 10px 30px -8px rgba(45, 106, 79, 0.35); }
+      50% { box-shadow: 0 14px 44px -8px rgba(45, 106, 79, 0.55); }
+    }
+    @keyframes shine {
+      0% { left: -80%; }
+      100% { left: 130%; }
+    }
+    @keyframes confettiFall {
+      0% { transform: translate3d(var(--drift), -12vh, 0) rotate(0deg); opacity: 1; }
+      100% { transform: translate3d(calc(var(--drift) * -1), 112vh, 0) rotate(760deg); opacity: 0.7; }
+    }
+    @keyframes listItemIn {
+      from { opacity: 0; transform: translateY(18px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes typing {
+      0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+      40% { opacity: 1; transform: translateY(-4px); }
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      opacity: 0.55;
+      z-index: -1;
+      pointer-events: none;
+      animation: blobFloat 14s ease-in-out infinite;
+    }
+    .blob-1 { width: 420px; height: 420px; background: rgba(45, 106, 79, 0.35); top: -120px; right: -120px; }
+    .blob-2 { width: 380px; height: 380px; background: rgba(212, 168, 67, 0.3); bottom: -140px; left: -110px; animation-delay: -7s; }
+    .blob-3 { width: 260px; height: 260px; background: rgba(64, 145, 108, 0.22); top: 45%; left: 60%; animation-delay: -3.5s; }
+
+    .container { width: 100%; max-width: 500px; position: relative; z-index: 1; }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 0 auto 1.25rem;
+      padding: 0.45rem 1.1rem;
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(45, 106, 79, 0.14);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--primary);
+      box-shadow: var(--shadow-sm);
+      animation: popIn 0.7s var(--ease-spring) both;
+    }
+
+    .logo-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      animation: popIn 0.8s var(--ease-spring) both;
+    }
+    .logo {
+      width: 104px;
+      height: 104px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 28px rgba(45, 106, 79, 0.25));
+      animation: idlePulse 3.4s ease-in-out infinite;
+      transition: transform 0.5s var(--ease-spring);
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 2.6rem 1.8rem;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      position: relative;
+      overflow: hidden;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary-light));
+    }
+
+    h1 {
+      font-size: clamp(1.55rem, 5.5vw, 2rem);
+      font-weight: 900;
+      text-align: center;
+      margin-bottom: 0.5rem;
+      line-height: 1.35;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    h2 {
+      font-size: clamp(1rem, 4vw, 1.2rem);
+      font-weight: 600;
+      text-align: center;
+      margin-bottom: 1.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .pin-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .pin-input {
+      width: 100%;
+      max-width: 280px;
+      padding: 1.1rem 1.4rem;
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      text-align: center;
+      letter-spacing: 0.5em;
+      direction: ltr;
+      border: 2.5px solid rgba(45, 106, 79, 0.18);
+      border-radius: var(--radius-sm);
+      background: #FBFAF7;
+      color: var(--text);
+      transition: all 0.35s ease;
+      box-shadow: inset 0 2px 8px rgba(27, 67, 50, 0.05);
+    }
+    .pin-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      background: #fff;
+      box-shadow: 0 0 0 6px rgba(45, 106, 79, 0.15), 0 12px 30px -12px rgba(45, 106, 79, 0.4);
+      transform: translateY(-2px);
+    }
+    .pin-input.wrong { animation: shake 0.45s ease-in-out; border-color: #E63946; }
+    .pin-hint {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .btn-main {
+      width: 100%;
+      height: 68px;
+      border: none;
+      border-radius: var(--radius-sm);
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--primary), var(--primary-light));
+      box-shadow: 0 14px 36px -10px rgba(45, 106, 79, 0.6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.45s var(--ease-spring), box-shadow 0.45s ease;
+    }
+    .btn-main::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -80%;
+      width: 45%; height: 100%;
+      background: linear-gradient(100deg, transparent, rgba(255,255,255,0.35), transparent);
+      transform: skewX(-20deg);
+      animation: shine 3s ease-in-out infinite;
+    }
+    .btn-main:hover { transform: translateY(-4px) scale(1.01); box-shadow: 0 22px 50px -12px rgba(45, 106, 79, 0.7); }
+    .btn-main:active { transform: translateY(0) scale(0.98); }
+    .btn-main.ghost {
+      background: linear-gradient(135deg, #7A7E8C, #9AA3B2);
+      box-shadow: 0 14px 36px -10px rgba(122, 126, 140, 0.55);
+    }
+
+    /* ===== RESULTS ===== */
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+      margin: 1.5rem 0;
+    }
+    .stat {
+      background: linear-gradient(135deg, rgba(45, 106, 79, 0.07), rgba(212, 168, 67, 0.07));
+      border: 1.5px solid rgba(45, 106, 79, 0.14);
+      border-radius: var(--radius-sm);
+      padding: 1.1rem 1rem;
+      text-align: center;
+      animation: listItemIn 0.5s var(--ease-spring) both;
+    }
+    .stat .num {
+      font-size: 1.9rem;
+      font-weight: 900;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+    .stat .label { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); }
+    .stat.highlight { border-color: var(--accent); background: linear-gradient(135deg, rgba(212, 168, 67, 0.14), rgba(45, 106, 79, 0.07)); }
+    .stat.highlight .num { color: var(--primary-dark); }
+    .stat.highlight .badge {
+      display: inline-block;
+      margin-top: 0.35rem;
+      background: var(--accent);
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: 800;
+      padding: 0.2rem 0.7rem;
+      border-radius: 999px;
+      animation: popIn 0.5s var(--ease-spring) both;
+    }
+
+    .votes-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 1.5rem 0 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--primary-dark);
+    }
+
+    .votes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-left: 0.3rem;
+    }
+    .votes-list::-webkit-scrollbar { width: 6px; }
+    .votes-list::-webkit-scrollbar-thumb { background: rgba(45, 106, 79, 0.25); border-radius: 999px; }
+
+    .vote-item {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      background: #FBFAF7;
+      border: 1.5px solid rgba(45, 106, 79, 0.12);
+      border-radius: var(--radius-sm);
+      padding: 0.9rem 1.1rem;
+      animation: listItemIn 0.5s var(--ease-spring) both;
+    }
+    .vote-item .v-icon { font-size: 1.6rem; flex-shrink: 0; }
+    .vote-item .v-info { flex: 1; }
+    .vote-item .v-time { font-size: 1.2rem; font-weight: 900; color: var(--primary); line-height: 1.2; }
+    .vote-item .v-sub { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); }
+
+    .empty {
+      text-align: center;
+      padding: 2.5rem 1rem;
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 1.05rem;
+      line-height: 2;
+    }
+    .empty .big { font-size: 2.6rem; display: block; margin-bottom: 0.5rem; }
+
+    .typing-note { text-align: center; color: var(--text-muted); font-size: 0.95rem; margin-top: 1.4rem; font-weight: 600; }
+    .typing-note span { display: inline-block; width: 6px; height: 6px; margin: 0 2px; border-radius: 50%; background: var(--accent); animation: typing 1.2s infinite; }
+    .typing-note span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-note span:nth-child(3) { animation-delay: 0.4s; }
+
+    .toast {
+      position: fixed;
+      bottom: 1.75rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(90px) scale(0.9);
+      background: var(--card);
+      padding: 0.9rem 1.6rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      font-weight: 800;
+      font-size: 1rem;
+      color: var(--primary-dark);
+      opacity: 0;
+      transition: all 0.5s var(--ease-spring);
+      z-index: 100;
+      border: 2px solid rgba(212, 168, 67, 0.4);
+      max-width: 92vw;
+      text-align: center;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+    .toast.wrong { border-color: rgba(230, 57, 70, 0.4); background: linear-gradient(135deg, #FFF7F5, #FFEFEC); }
+
+    .confetti-piece {
+      position: fixed;
+      top: -3vh;
+      pointer-events: none;
+      z-index: 80;
+      animation: confettiFall linear forwards;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      margin-top: 1.4rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+      transition: transform 0.3s var(--ease-spring);
+    }
+    .back-link:hover { transform: translateY(-2px); }
+
+    @media (max-width: 440px) {
+      body { padding: 1.25rem 0.75rem; }
+      .card { padding: 2.2rem 1.3rem; }
+      .stats { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="container">
+    <div class="chip">🔐 لوحة النتائج - ريحانة الخير</div>
+
+    <div class="logo-wrap" role="img" aria-label="شعار مؤسسة ريحانة الخير">
+      <img src="ريحانة.png" alt="شعار مؤسسة ريحانة الخير" class="logo" id="logoImg" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="logo" style="display:none; background:linear-gradient(135deg,var(--primary),var(--accent)); border-radius:50%; align-items:center; justify-content:center; color:white; font-weight:900; font-size:1.05rem; letter-spacing:0.06em; padding:0 0.3rem;">RI7HANA</div>
+    </div>
+
+    <!-- LOCK SCREEN -->
+    <section class="card" id="lockCard">
+      <h1>صفحة النتائج 🔐</h1>
+      <h2>ادخل كلمة السر يا كابتن 🤫</h2>
+      <div class="pin-wrap">
+        <input type="password" class="pin-input" id="pinInput" inputmode="numeric" maxlength="10" placeholder="••••••" aria-label="كلمة السر">
+        <div class="pin-hint">💡 كلمة السر سرية بين الفريق</div>
+      </div>
+      <button class="btn-main" id="btnUnlock" type="button" aria-label="دخول">
+        <span>🔓</span> دخول
+      </button>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="card" id="resultsCard" style="display:none;">
+      <h1>النتايج يا شباب 📊</h1>
+      <h2 id="resultsSub">المواعيد اللي اختاروها الفريق 👇</h2>
+
+      <div class="stats">
+        <div class="stat" id="statCount">
+          <div class="num" id="countNum">0</div>
+          <div class="label">عدد الاختيارات 🗳️</div>
+        </div>
+        <div class="stat highlight" id="statTop">
+          <div class="num" id="topTime">—</div>
+          <div class="label">الأكثر اختيارًا ⭐</div>
+          <div class="badge">🏆 الأغلبية</div>
+        </div>
+      </div>
+
+      <div class="votes-title">📋 اختيارات الفريق</div>
+      <div class="votes-list" id="votesList"></div>
+
+      <div style="height:1.2rem;"></div>
+      <button class="btn-main ghost" id="btnClear" type="button" aria-label="مسح كل النتائج">
+        <span>🗑️</span> مسح كل النتائج
+      </button>
+      <a class="back-link" href="index.html">← رجوع لصفحة الاختيار</a>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="alert" aria-live="polite"></div>
+
+  <script>
+    const VOTES_KEY = 'reihana_votes';
+    const UNLOCK_KEY = 'reihana_unlocked';
+    const PASSWORD = '252005';
+
+    const wrongMessages = [
+      "كلمة السر غلط يا نجم 😂",
+      "جرب تاني كده... 👀",
+      "عيب عليك هي مش سايبه هنا بضحك 😂",
+      "إنت مش من الفريق؟ 😏",
+      "آخر فرصة يا باشا 😅",
+      "ههههه لا يا عم 🌚"
+    ];
+
+    let wrongCount = 0;
+    let toastTimer = null;
+
+    const lockCard = document.getElementById('lockCard');
+    const resultsCard = document.getElementById('resultsCard');
+    const pinInput = document.getElementById('pinInput');
+    const btnUnlock = document.getElementById('btnUnlock');
+    const btnClear = document.getElementById('btnClear');
+    const votesList = document.getElementById('votesList');
+    const countNum = document.getElementById('countNum');
+    const topTime = document.getElementById('topTime');
+    const toast = document.getElementById('toast');
+
+    // ===== HELPERS =====
+    function showToast(msg, isWrong = false) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.toggle('wrong', isWrong);
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function getVotes() {
+      try { return JSON.parse(localStorage.getItem(VOTES_KEY)) || []; }
+      catch { return []; }
+    }
+
+    function saveVotes(votes) {
+      localStorage.setItem(VOTES_KEY, JSON.stringify(votes));
+    }
+
+    function confetti() {
+      const colors = ['#2D6A4F', '#D4A843', '#40916C', '#E8C56D', '#1B4332', '#FDE68A'];
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        const size = 6 + Math.random() * 10;
+        p.style.width = size + 'px';
+        p.style.height = (Math.random() > 0.35 ? size * 0.55 : size) + 'px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.setProperty('--drift', (Math.random() * 40 - 20) + 'vw');
+        p.style.animationDuration = (2.2 + Math.random() * 2) + 's';
+        p.style.animationDelay = (Math.random() * 0.6) + 's';
+        document.body.appendChild(p);
+        setTimeout(() => p.remove(), 5200);
+      }
+    }
+
+    function formatDateTime(iso) {
+      try {
+        return new Intl.DateTimeFormat('ar-EG', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(iso));
+      } catch { return ''; }
+    }
+
+    // ===== UNLOCK =====
+    function unlock() {
+      sessionStorage.setItem(UNLOCK_KEY, '1');
+      lockCard.style.display = 'none';
+      resultsCard.style.display = 'block';
+      resultsCard.style.animation = 'stepIn 0.55s var(--ease-spring) both';
+      confetti();
+      render();
+    }
+
+    function tryUnlock() {
+      if (pinInput.value.trim() === PASSWORD) {
+        pinInput.value = '';
+        unlock();
+        showToast('أهلاً بيك يا كابتن 🔓😎');
+      } else {
+        wrongCount++;
+        pinInput.value = '';
+        pinInput.classList.add('wrong');
+        setTimeout(() => pinInput.classList.remove('wrong'), 500);
+        showToast(wrongMessages[Math.min(wrongCount - 1, wrongMessages.length - 1)], true);
+      }
+    }
+
+    btnUnlock.addEventListener('click', tryUnlock);
+    pinInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') tryUnlock(); });
+
+    // ===== RENDER =====
+    function render() {
+      const votes = getVotes();
+      countNum.textContent = votes.length;
+
+      if (votes.length === 0) {
+        topTime.textContent = '—';
+        votesList.innerHTML = `
+          <div class="empty">
+            <span class="big">🫥</span>
+            لسه مفيش اختيارات..
+            <br>اول ما الشباب يختاروا الميعاد هيظهر هنا تلقائيًا
+          </div>`;
+        return;
+      }
+
+      const tally = {};
+      votes.forEach(v => { tally[v.formatted] = (tally[v.formatted] || 0) + 1; });
+      const topEntry = Object.entries(tally).sort((a, b) => b[1] - a[1])[0];
+      topTime.textContent = topEntry[0];
+
+      votesList.innerHTML = [...votes].reverse().map((v, i) => `
+        <div class="vote-item" style="animation-delay:${i * 0.06}s">
+          <span class="v-icon">⏰</span>
+          <div class="v-info">
+            <div class="v-time">${v.formatted}</div>
+            <div class="v-sub">📅 السبت 🌙 بالليل • ${formatDateTime(v.at)}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // ===== CLEAR =====
+    btnClear.addEventListener('click', () => {
+      if (confirm('متأكد إنك عايز تمسح كل النتائج؟ 🤨')) {
+        saveVotes([]);
+        render();
+        showToast('اتمسح كل حاجة 🧹😂');
+      }
+    });
+
+    // ===== INIT =====
+    if (sessionStorage.getItem(UNLOCK_KEY) === '1') {
+      lockCard.style.display = 'none';
+      resultsCard.style.display = 'block';
+      render();
+    }
+  </script>
+</body>
+</html>
